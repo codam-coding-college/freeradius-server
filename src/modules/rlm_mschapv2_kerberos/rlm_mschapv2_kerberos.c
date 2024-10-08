@@ -909,6 +909,12 @@ static unsigned char* kerberos_ntlm_hash(rlm_mschapv2_kerberos_t* inst, char* pr
 				krb5_free_keyblock_contents(inst->krb_context, &key);
 			}
 		}
+		else {
+			inst->krb5_dbe_free_contents(inst->krb_context, db_entry);
+			krb5_free_principal(inst->krb_context, krb_principal);
+			MSCHAP_INFO("won't check ntlm hash of %s no arcfour-hmac encryption!", principal);
+			return NULL;
+		}
 	}
 
 	/* Sanity check for the key "we've got", ensure it's type */
